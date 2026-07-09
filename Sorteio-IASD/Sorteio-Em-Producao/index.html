@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorteio</title>
+    <link rel="stylesheet" type="text/css" href="estilo/fontes.css" />
+    <link rel="stylesheet" type="text/css" href="estilo/style.css" />
+</head>
+<body>
+
+    <!-- Div que mostra a mascara quando solicitado -->
+    <div id="mascara" class="mascara"></div>
+
+    <!-- Habilita os audios para quando for solicitado -->
+    <audio id="somTambor" src="audio/tambor.mp3" preload="auto"></audio>
+    <audio id="somPrato" src="audio/prato.mp3" preload="auto"></audio>
+    <audio id="somPalmas" src="audio/palmas.mp3" preload="auto"></audio>
+    
+    <!-- Modal que mostra a janela credito -->
+     <div class="modalEscuro" id="credito">
+        <div class="trocar-titulo"><span style='float:left;font-size: 20px;color:yellowgreen'>©</span>Crédito</div><br>
+        <label for="">👷‍♀️ Cláudio Brito.</label><br>
+        <label for="">🏙️ Ribeirão - PE.</label><br>
+        <label for="">📆 Maio - 2026.</label><br><br>
+        <span>Se o aplicativo lhe ajudou e voce puder me ajudar, eu serei muito grato. Qualquer valor me ajudará muito.</span><br><br>
+        <span> Meu pix 60978813472 Jose Claudio X Brito.</span><br><br>
+        <span>🤝 Podemos ser amigos. Visite minhas redes sociais, clicando abaixo.</span><br><br>		
+        <a href="https://www.instagram.com/xavier.brito/" target="_blank">Instagram - xavier.brito</a><br>
+        <a href="https://www.youtube.com/channel/UClYcoL8yyFcxcSzK2L2zByw/videos" target="_blank">Youtube - CTE-Cláudio Brito</a><br>
+        <a href="https://www.facebook.com/claudio.xavier.37669" target="_blank">Facebook - claudio.xavier.37669 - Cláudio Brito</a><br><br>
+        <span><center>📝 Contanto, sugestão</center></span><br>
+        <span><center>(81)99924-6724</center></span><br>
+        <span><center>📧 claudioadventista@hotmail.com</center></span>  
+        <span class="fechar" onclick="fechar()">❌</span>
+        <span class="apagar" title="Limpa a Lista de Cadastrados" onclick = 'limparCadastrados();'>LC</span>
+    </div>
+   
+    <!-- formulario modal para mudar o nome e o endereco -->
+    <div class="modalEscuro" id="formulario">
+        <div class="trocar-titulo"><span style='float:left'>🔃</span>Trocar o Título</div><br>
+        <label for="inputIgreja">⛪ Nome</label>
+        <input type="text" class="input-novo cadastro" id="inputIgreja" maxlength="50" placeholder="Digite o nome" ><br>
+        <label for="inputAbrev">⛪ Abreviação</label>
+        <input type="text" class="input-novo cadastro" id="inputAbrev" maxlength="10" placeholder="Digite o nome abreviado" ><br>
+        <label for="inputBairro">🏙️ Bairro</label>
+        <input type="text" class="input-novo cadastro" id="inputBairro" maxlength="40" placeholder="Digite o bairro " ><br>
+        <label for="inputCidade">🏙️ Cidade</label>
+        <input type="text" class="input-novo cadastro" id="inputCidade" maxlength="40" placeholder="Digite a cidade " ><br>
+        <label for="inputTexto">📘 Texto</label>
+        <input type="text" class="input-novo cadastro" id="inputTexto" maxlength="50" placeholder="Digite o texto " ><br>
+        <label for="inputMinisterio">⛪ Ministério</label>
+        <input type="text" class="input-novo cadastro" id="inputMinisterio" maxlength="40" placeholder="Digite o ministério " ><br><br>
+        <button class="but btn-trocar" id="trocar" onclick="salvarInformacao()">🔄 Trocar</button>
+        <button class="but btn-limpar-tudo dados" onclick="limparDados()">🗑️ LIMPAR</button>
+        <button class="but btn-limpar-tudo dados" onclick="limparFormulario()" >🗑️ APAGAR</button>
+        <span class="fechar" onclick="fechar()">❌</span>
+    </div>
+
+    <!-- Modal de configuracao de audio -->
+    <div class="formulario" id="muteSel">
+        <div class="cabecario" id="cabecarioAudio"></div>
+        <div class="modalAudio" id="modalAudio">
+            <input type="checkbox" id="bat" class="checkbox" onchange="muteBateria()"><label id="labelBat" for="bat">🔇 Silenciar a Bateria</label><br><br>
+            <input type="checkbox" id="prato" class="checkbox" onchange="mutePrato()"><label id="labelPtrato" for="prato">🔇 Silenciar o Prato</label><br><br>
+            <input type="checkbox" id="palmas" class="checkbox" onchange="mutePalmas()"><label id="labelPalmas" for="palmas">🔇 Silenciar as Palmas</label><br><br>
+            <input type="checkbox" id="mute" class="checkbox" onchange="alternarMute()"><label id="labelTotal" for="palmas">🔇 Silenciar Tudo</label><br><br>
+            <span class="label-velocidade" style="color: darkblue;">🔊 Volume:</span>
+            <input type="range" id="volume" min="0" max="1" step="0.1" value="0.3" oninput="ajustaVolume(this.value)">
+            <span class="label-velocidade" id="valorVolume" style="color:darkblue" ><span class='completaZero' >0</span>30%</span><br><br>
+        </div>
+        <button  class="but btn-historico" id="confirmeAudio" onclick="fechar()" style="float: left;" ></button>
+        <button  class="but btn-limpar"  onclick="fechar()"  style="float: right;">❌ Fechar</button>
+    </div>
+     
+   <!-- Modal branco, usado em varias ocasioes  -->
+     <div class="formulario" id="modalHistorico">
+        <div class="cabecario" id="cabecario"></div>
+        <div class="cabecario2" id="cabecario2"></div>
+        <div class="modal" id="modal" ></div>
+        <button  class="but btn-historico oculto" id="confirme" style="float: left;" ></button>
+        <button  class="but btn-limpar" onclick="fechar()"  style="float: right;">❌ Fechar</button>
+    </div>
+    
+    <div class="container" id="containerPrincipal">
+        <!-- Essa div informa na pagina principal, na parte de acima que todos os nomes já foram sorteados -->
+        <div class="aviso-erro aviso-fim" id="avisoFim">⚠️ Todos os nomes já foram sorteados!</div>
+        <!-- Clicando na imagem que cica emcima do lado esquerdo, troca a logomarca -->
+        <img class="logomarca" id="logoSorteada" src="" alt="Logo" onclick="trocarLogo()">
+        <!-- Essas duas divs abaixo, mostra o nome da igreja e a cidade, na parte de cima -->
+        <div class="logo" id="textoIgreja" >NOME</div>
+        <div class="logo" id="textoCidade">CIDADE - ESTADO</div>
+        <!-- Essa div mostra os erros, fica na parte di cima --> 
+        <div class="aviso-erro" id="avisoErro"></div>
+        <!-- O span abaixo mostra o texto em branco emcima do lado direito para trocar o nome e a cidade -->
+        <span class="titulo" onclick="formulario()">Trocar o Título</span>
+
+        <!-- A div abaixo, adicionar os numeros aleatorios -->
+        <div class="area-numeros"  style="margin-right: 0.5%;">
+            <label class="label-numeros">Números Aleatórios:</label>
+            <!--<input type="text" class="input-numeros" id="inputNumerosAleatorios" placeholder="Ex: 123, 12, 474, 08 ou 123 12 474 08" oninput="virgula(this)" >-->
+            <input type="text" class="input-numeros" id="inputNumerosAleatorios" placeholder="Ex: 123, 12, 474, 08 ou 123 12 474 08" onkeypress="controlarVirgulaAuto(event)" >
+            <button class="btn-gerar" title="Adiciona Números Aleatórios" onclick="adicionarNumerosAleatorios()">&#128287 ADICIONAR NÚMEROS</button>
+            <button type="button" onclick="document.getElementById('inputNumerosAleatorios').value = '';document.getElementById('inputNumerosAleatorios').focus();" class="btn-limpar-pesquisa" title="Limpa Números Aleatórios" >❌</button>
+            <div class="dica-numeros">💡 Cole números separados por vírgula ou espaço</div>
+        </div>
+
+         <!-- A div abaixo, gera os numeros na sequencia -->
+        <div class="area-numeros" style="margin-right: 0.5%;">
+            <label class="label-numeros" >Gerar Sequência de Números:</label>
+            <input type="text" class="input-numeros" id="inputNumeros" maxlength="10" placeholder="Ex: 50 ou 10,30" oninput="limitarVirgula(this)">
+            <button class="btn-gerar" title="Adiciona Números Sequenciais" onclick="gerarNumeros()">🎱 GERAR SEQUÊNCIA</button>
+            <button type="button" onclick="document.getElementById('inputNumeros').value = '';document.getElementById('inputNumeros').focus();" class="btn-limpar-pesquisa" title="Limpa Sequência de Números" >❌</button>
+            <div class="dica-numeros">💡 Digite "50" = 1 a 50 | "10,30" = 10 a 30 | Só 1 vírgula</div>
+        </div>
+
+         <!-- A div abaixo, configuracao de velocidade da barra do sorteio -->
+        <div class="area-numeros"  style="padding-bottom:0;"  >
+             <label class="label-numeros" >Configurações do Sorteio:</label>
+            <div class="config-velocidade" style="margin-bottom: 3px;">
+                <span class="label-velocidade">Sorteio:</span>
+                <select class="select-velocidade" style="padding-right:15px" id="velocidadeSorteio">
+                    <option value="5000" selected>Lento (5s)</option>
+                    <option value="3000" >Normal (3s)</option>
+                    <option value="1500">Rápido (1.5s)</option>
+                    <option value="500">Instantâneo (0.5s)</option>
+                </select>
+            </div>
+            
+            <!-- A div abaixo, configuracao de velocidade das piscadas dos nomes na tela -->
+            <div class="config-velocidade" style="margin-bottom: 3px;">
+                <span class="label-velocidade">Piscadas:</span>
+                <select class="select-velocidade" id="velocidadePiscada">
+                    <option value="1200">Muito Lento (1.2s)</option>
+                    <option value="800" >Normal (0.8s)</option>
+                    <option value="400" >Rápido (0.4s)</option>
+                    <option value="200" >Muito Rápido (0.2s)</option>
+                    <option value="50" selected>Strobo (0.05s)</option>
+                </select>
+            </div>
+
+            <!-- Botao para entrar nas configuracoes de audio, modal escuro  -->
+            <button class="btn-gerar btn-mute" title="Mostra Configuração de Áudio" onclick="formularioAudio()" >🔊 Áudio</button>
+        </div>
+
+        <!-- Div onde mostra a lista de participantes, no lado direito -->
+        <div class="area-input" style="float: right;">
+            <label class="label" id="tituloLista">Lista de Participantes :</label>
+            <div id="listaParticipantes">
+                <div id="butSearch">
+                <input type="text" class="input-novo cadastro" style="width: 40%;" id="inputPesquisa" maxlength="30" placeholder="Pesquisar" oninput="pesquisarCadastrado(this.value)"> 
+                <button type="button" onclick="document.getElementById('inputPesquisa').value = ''; limparPesquisa()" class="btn-limpar-pesquisa" title="Limpa Pesquisar" >❌</button>
+                <button class="btn-importar-todos but btn-limpar-tudo"  id="btnImportarTodos" onclick="importarOuRetornar()" title="Importar lista completa">📥 IMP</button>
+                </div>
+                <div class="lista-cadastrados" id="listaEditavel"></div>
+                <div class="lista-cadastrados-espera" id="listaEspera"></div>
+                <button class="but-historico but-importar but-prim-imp" id="butEspera" style="margin-top:5px;display:none;" title="" onclick="mostraEspera()">🖐 Espera</button>
+                <button class="but-historico but-importar but-prim-imp" id="butVoltar" style="margin-top:5px;display:none;" title="" onclick="esconderEspera()"><span style="color:#ffaa00">↻</span> Voltar</button>
+                <div class="contador" id="contador">0 nomes</div>
+            </div>
+        </div>
+
+        <!-- Div onde mostra a lista de cadastrados, no lado esquerdo -->
+        <div class="area-input" style="float: left;margin-right: 0.5%;" >
+            <label class="label">Lista de Cadastrados:</label>
+            <input type="text" class="input-novo cadastro" style="width: 53%;" id="inputNumero" maxlength="11" placeholder="Número ou CPF" > 
+            <button type="button" onclick="document.getElementById('inputNumero').value = '';document.getElementById('inputNumero').focus();" class="btn-limpar-pesquisa" title="Limpa Número ou CPF" >❌</button>
+            <!-- Botao CAD para cadastrar numeros e CPF -->
+            <button class="but btn-limpar-numeros" id="cadastrarNumero"  onclick="
+                document.getElementById('inputNumero').classList.remove('cpf-ok');
+                if(document.getElementById('inputNumero').value === ''){ 
+                    travaInput(inputNumero, '⚠️ Digite um número ou CPF antes!');
+                    return;
+                }; 
+                adicionarCadastrado();" 
+                title="Cadastra números e CPF" 
+                style="position: relative; padding-left: 20px;padding-right: 20px;">
+                5️⃣ CAD
+            </button>  
+            <div class="lista-cadastrados" id="listaCadastrados">
+                <input type="text" class="input-novo cadastro" id="inputCadastrado" maxlength="30" placeholder="Digite um nome e aperte Enter...">
+            </div>
+            <div class="titulo credito" onclick="formularioCredito()">Crédito</div>
+            <div class="contador" id="contarCadastrados">0 nomes</div> 
+        </div>
+
+        <!-- A div abaixo, mostra os botoes, fica no centro -->
+        <div class="botoes">   
+            <button class="but btn-sortear" id="btnSortear" onclick="abrirSorteio()">🎲 SORTEAR</button>
+            <button class="but-historico" onclick="verHistorico()" title="Mostra o Histórico Acumulado">📜 HIST.</button>
+            <button class="but-historico" onclick="verHistoricoAtual()" title="Mostra o Histórico Atual" >📜 ATUAL</button>
+            <button class="but-historico" onclick="verHistoricoPermanente()" title="Mostra o Histórico Permanente">📜 PERM.</button>  
+            <button class="but btn-limpar" onclick="resetarSorteados()" title="Limpa o Histórioco Acumulado, o Histórico Atual e reinicia a Lista de Participantes">🔄 REINICIAR</button>
+            <button class="but btn-limpar-tudo" onclick="limparTudo()" title="Limpa o Histórioco Acumulado, o Histórico Atual e a Lista de Participantes">🗑️ LIMPAR</button>
+            <button class="but btn-exportar" onclick="reportar()" title="Importa o Histórico Atual para o Histórico Permanente">🔄 IMPORTAR</button>
+            <button class="but btn-overlay" onclick="salvarImagem()" title="Salvar uma imagem do sorteado">📸 SALVAR</button>
+            
+            <!-- a div que mostra os botoes presets abaixo dos outros botoes -->
+            <div class="presets" style="width:90%;">
+                <button id="btnPresetFamilia" class="botao-preset ativo" title="Presets que salvam no Histórico Permanente">💾 <span class="but-pequeno">P 1</span></button>
+                <button id="btnPresetInfantil" class="botao-preset" title="Presets que salvam no Histórico Permanente">💾  <span class="but-pequeno">P 2</span></button>
+                <button id="btnPresetMusica" class="botao-preset" title="Presets que salvam no Histórico Permanente">💾  <span class="but-pequeno">P 3</span></button>
+                <button id="btnPresetGeral" class="botao-preset" title="Presets que salvam no Histórico Permanente">💾  <span class="but-pequeno">P 4</span></button>
+                <button class="botao-pequeno" onclick="limparPresetAtual()" title="Limpa presets separadamente no Histórico Permanente">🗑️  <span class="but-pequeno">L P</span></button>
+            </div>
+	    <button class="but-historico but-importar but-prim-imp" title="Salva todos os nomes e os resultados em Json" onclick="exportarTudo()">💼 Tudo</button>
+            <button class="but-historico but-importar" title="Recupera o arquivo salvo em Json" onclick="importarTudo()">📥 Backup</button>   
+        </div>
+    </div>
+    <!-- MODAL OVERLAY DO SORTEIO -->
+    <div class="overlay-sorteio" id="overlaySorteio">
+        <!-- Div que mosrta o nome piscando e sendo sorteado -->
+        <div class="nome-sorteado-overlay" id="nomeSorteadoOverlay"></div>
+        <!-- Div onde mostra a barra de progresso dentro -->
+        <div class="barra-progresso-overlay" id="barraProgressoOverlay">
+            <!-- Div barra de progresso -->
+            <div class="barra-preenchimento-overlay" id="barraPreenchimentoOverlay"></div>
+        </div>
+        <!-- Divo do botao sortear no modal de sorteio -->
+        <div class="botoes-overlay">
+            <button class="btn-proximo" id="btnProximo" onclick="sortearProximo()">🎲 SORTEAR PRÓXIMO</button>
+        </div>
+        <!-- Div com os botoes abaixo do botao sortear proximo -->
+        <div class="botao-secundario">
+            <div class="btn-secundario historico-secundario" onclick="verHistoricoAtual()">HISTÓRICO📜</div> 
+            <div class="btn-secundario audio-secundario" onclick="formularioAudio()" >ÁUDIO &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp🔊</div>
+            <div class="btn-secundario voltar-secundario" onclick="fecharSorteio()">VOLTAR&nbsp&nbsp&nbsp&nbsp⬅️</div>
+        </div>
+        <!-- Div que mostra o status do sorteio no modal de sorteio -->
+        <div class="status-overlay" id="statusOverlay"></div>
+    </div>
+    <script src="script/script.js"></script>
+</body>
+</html>
