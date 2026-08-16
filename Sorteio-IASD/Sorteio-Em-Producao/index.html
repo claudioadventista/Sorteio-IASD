@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorteio</title>
+    <link rel="stylesheet" type="text/css" href="estilo/fontes.css" />
+    <link rel="stylesheet" type="text/css" href="estilo/style.css" />
+</head>
+<body>
+
+    <!-- Div que mostra a mascara quando solicitado -->
+    <div id="mascara" class="mascara"></div>
+
+    <!-- Habilita os audios para quando for solicitado -->
+    <audio id="somTambor" src="audio/tambor.mp3" preload="auto"></audio>
+    <audio id="somPrato" src="audio/prato.mp3" preload="auto"></audio>
+    <audio id="somPalmas" src="audio/palmas.mp3" preload="auto"></audio>
+   
+    <!-- Modal que mostra a janela credito -->
+     <div class="modalEscuro" id="credito">
+        <div class="trocar-titulo"><span style='float:left;font-size: 20px;color:yellowgreen'>©</span><img src='flags/logo_branco_colorido.jpg' alt='bandeira usa' width='20' height='15'><span data-i18n="creditoForm"></span></div><br>
+        <label for="">👷‍♀️ Cláudio Brito.</label><br>
+        <label for="">🏙️ Ribeirão - PE.</label><br>
+        <label for="">📆 Maio - 2026.</label><br><br>
+        <span id="textoCredito"></span>	
+        <a href="https://www.instagram.com/xavier.brito/" target="_blank">Instagram - xavier.brito</a><br>
+        <a href="https://www.youtube.com/channel/UClYcoL8yyFcxcSzK2L2zByw/videos" target="_blank">Youtube - CTE-Cláudio Brito</a><br>
+        <a href="https://www.facebook.com/claudio.xavier.37669" target="_blank">Facebook - claudio.xavier.37669 - Cláudio Brito</a><br><br>
+        <span id="textoCreditoContato"></span>
+        <span><center>+55(81)99924-6724</center></span><br>
+        <span><center>📧 claudioadventista@hotmail.com</center></span> 
+        <span class="fechar" onclick="fechar()">❌</span>
+        <span class="apagar" title="Limpa a Lista de Cadastrados" onclick = 'limparCadastrados();'>LC</span>
+    </div>
+   
+    <!-- formulario modal para mudar o nome e o endereco -->
+    <div class="modalEscuro" id="formulario">
+        <div class="trocar-titulo"><span style='float:left'>🔃</span><span data-i18n="trocaTitulo"></span></div><br>
+        <label for="inputIgreja" data-i18n="nomeIgreja"></label>
+        <input type="text" class="input-novo cadastro" id="inputIgreja" maxlength="50" placeholder="nome_placeholder" data-i18n="nome_placeholder" ><br>
+        <label for="inputAbrev" data-i18n="nomeIgrejaAbrev"></label>
+        <input type="text" class="input-novo cadastro" id="inputAbrev" maxlength="10" placeholder="nome_Abrevplaceholder" data-i18n="nome_Abrevplaceholder" ><br>
+        <label for="inputBairro" data-i18n="bairro"></label>
+        <input type="text" class="input-novo cadastro" id="inputBairro" maxlength="40" placeholder="bairro_placeholder" data-i18n="bairro_placeholder" ><br>
+        <label for="inputCidade" data-i18n="cidadeIgreja" ></label>
+        <input type="text" class="input-novo cadastro" id="inputCidade" maxlength="40" placeholder="cidade_placeholder" data-i18n="cidade_placeholder" ><br>
+        <label for="inputTexto" data-i18n="textoIgreja"></label>
+        <input type="text" class="input-novo cadastro" id="inputTexto" maxlength="50" placeholder="texto_placeholder" data-i18n="texto_placeholder" ><br>
+        <label for="inputMinisterio"  data-i18n="ministerioIgreja"></label>
+        <input type="text" class="input-novo cadastro" id="inputMinisterio" maxlength="40" placeholder="ministerio_placeholder" data-i18n="ministerio_placeholder" ><br><br>
+        <label for="inputMinisterio"><span data-i18n="idioma"></span></label>
+        <select id="seletorIdioma" class="input-novo cadastro">
+            <option value="en" class="lingua"> English</option>
+            <option value="es" class="lingua"> Español</option>
+            <option value="pt" class="lingua"> Português</option>
+        </select>
+        <br><br>
+        <button class="but btn-trocar" id="trocar" onclick="salvarInformacao()" title="btn_trocar_title" data-i18n="btn_trocar_title"><span data-i18n="btn_trocar" ></span></button>
+        <button class="but btn-limpar-tudo dados" onclick="limparDados()" title="btn_limpar_title" data-i18n="btn_limpar_title"><span data-i18n="btn_limparIgreja"></span></button>
+        <button class="but btn-limpar-tudo dados" onclick="limparFormulario()" title="btn_apagar_title" data-i18n="btn_apagar_title"><span data-i18n="btn_apagaIgreja"></span></button>
+        <span class="fechar" onclick="fechar()">❌</span>
+    </div>
+
+    <!-- Modal de configuracao de audio -->
+    <div class="formulario" id="muteSel">
+        <div class="cabecario" id="cabecarioAudio"></div>
+        <div class="modalAudio" id="modalAudio">
+            <input type="checkbox" id="bat" class="checkbox" onchange="muteBateria()"><label id="labelBat" for="bat">🔇 <span data-i18n="sMusica"></span></label><br><br>
+            <input type="checkbox" id="prato" class="checkbox" onchange="mutePrato()"><label id="labelPtrato" for="prato">🔇 <span data-i18n="sPrato"></span></label><br><br>
+            <input type="checkbox" id="palmas" class="checkbox" onchange="mutePalmas()"><label id="labelPalmas" for="palmas">🔇 <span data-i18n="sPalmas"></span></label><br><br>
+            <input type="checkbox" id="mute" class="checkbox" onchange="alternarMute()"><label id="labelTotal" for="palmas">🔇 <span data-i18n="sTudo"></span></label><br><br>
+            <span class="label-velocidade" style="color: darkblue;" >🔊 <span data-i18n="sVolume">Volume:</span></span>
+            <input type="range" id="volume" min="0" max="1" step="0.1" value="0.3" oninput="ajustaVolume(this.value)">
+            <span class="label-velocidade" id="valorVolume" style="color:darkblue" ><span class='completaZero' >0</span>30%</span><br><br>
+            <div id="seletorMusica" class="input-novo">
+                <label class="texto-musica" data-i18n="escMusica"></label><br>
+                <button class="btn-musica" onclick="tocarMusica(1)" >A</button>
+                <button class="btn-musica" onclick="tocarMusica(2)" >B</button>
+                <button class="btn-musica" onclick="tocarMusica(3)" >C</button>
+                <button class="btn-musica" onclick="tocarMusica(4)" >D</button>
+                <button class="btn-musica" onclick="tocarMusica(5)" >E</button>
+                <button class="btn-musica" onclick="tocarMusica(6)" >F</button>
+                <button class="btn-musica" onclick="tocarMusica(7)" >G</button>
+                <button class="btn-musica" onclick="tocarMusica(8)" >H</button>
+                <button class="btn-musica" onclick="tocarMusica(9)" >I</button>
+                <button class="btn-musica" onclick="tocarMusica(10)" >J</button>
+                <button class="btn-musica" onclick="tocarMusica(11)" >K</button>
+                <button class="btn-musica" onclick="tocarMusica(12)" >L</button>
+                <button class="btn-musica" onclick="tocarMusica(13)" >M</button>
+                <button class="btn-musica" onclick="tocarMusica(14)" >N</button>
+                <button class="btn-musica" onclick="tocarMusica(15)" >O</button>
+                <button class="btn-musica musicaStop" onclick="silenciar()" >🖐</button>
+                <br>
+                <span class="label-velocidade" style="color: darkblue;" >🔊<span data-i18n="sVolume">Volume:</span></span> 
+                <input id="volumeMusica" type="range" min="0" max="1" step="0.1" oninput="setVolume(this.value)">
+            </div> 
+        </div><br>
+        <button  class="but btn-historico" id="confirmeAudio" onclick="fechar()" style="float: left;" ></button>
+        <button  class="but btn-limpar"  onclick="fechar()"  style="float: right;" data-i18n="btn_fechar"></button>
+    </div>
+     
+   <!-- Modal branco, usado em varias ocasioes  -->
+     <div class="formulario" id="modalHistorico">
+        <div class="cabecario" id="cabecario"></div>
+        <span id='imgSalva' class='imgSalva'></span>
+        <button class="but but-semImagem"for="" id="butSemImagem" style="float: right;display: none;" title="btn_limpaImagem" data-i18n="btn_limpaImagem" onclick="document.getElementById('logoInput').value = '';document.getElementById('logoInput').type = 'text';document.getElementById('logoInput').type = 'file'; document.getElementById('confirme').style.display = 'block';logInput(); ">❌ 📸</button>
+        <button class="but but-imagem"for="logoInput" id="butImagem" style="float: right;display: none;text-align: center;" title="btn_carregaImagem" data-i18n="btn_carregaImagem" onclick="document.getElementById('logoInput').click();">📸 <span data-i18n="btn_imagem"></span></button>
+        <div class="modal" id="modal" ></div>
+        <fieldset id="radioLarguraImg" class="radioLarguraImg" ><legend class="legenda_largura_imagem" data-i18n="field_largura_imagem"></legend>
+            <label class="labelLargura">
+                <input type='radio' name='tamanhoLogo' value='130' ><span class="span_largura_imagem" data-i18n="field_estreito"></span>
+            </label>
+            <label class="labelLargura">
+                <input type='radio' name='tamanhoLogo' value='150'><span class="span_largura_imagem" >Normal</span>
+            </label>
+            <label class="labelLargura">
+                <input type='radio' name='tamanhoLogo' value='300' checked ><span class="span_largura_imagem" data-i18n="field_largo"></span>
+            </label><br>
+        </fieldset>
+        <button  class="but btn-historico oculto" id="confirme" style="float: left;" ></button>
+        <input type="file" id="logoInput" accept="image/*" style="margin:10px; padding:8px;display:none;">
+        <button  class="but btn-limpar" onclick="fechar()"  style="float: right;"  data-i18n="btn_fechar"></button>
+    </div>
+    
+    <div class="container" id="containerPrincipal">
+        <!-- Essa div informa na pagina principal, na parte de acima que todos os nomes já foram sorteados -->
+        <div class="aviso-erro aviso-fim" id="avisoFim" ></div>
+        <!-- Clicando na imagem que cica emcima do lado esquerdo, troca a logomarca -->
+        <img class="logomarca" id="logoSorteada" src="" alt="Logo" onclick="trocarLogo()">
+        <!-- Essas duas divs abaixo, mostra o nome da igreja e a cidade, na parte de cima -->
+        <div class="logo" id="textoIgreja"></div>
+        <div class="logo" id="textoCidade"></div>
+        <!-- Essa div mostra os erros, fica na parte di cima --> 
+        <div class="aviso-erro" id="avisoErro"></div>
+        <!-- O span abaixo mostra o texto em branco emcima do lado direito para trocar o nome e a cidade -->
+        <span class="titulo" onclick="formulario()" data-i18n="trocaTitulo"></span>
+
+        <!-- A div abaixo, adicionar os numeros aleatorios -->
+        <div class="area-numeros"  style="margin-right: 0.5%;">
+            <label class="label-numeros" data-i18n="numAleatorio"></label>
+            <!--<input type="text" class="input-numeros" id="inputNumerosAleatorios" placeholder="Ex: 123, 12, 474, 08 ou 123 12 474 08" oninput="virgula(this)" >-->
+            <input type="text" class="input-numeros" id="inputNumerosAleatorios" placeholder="aleatorioPlace" data-i18n="aleatorioPlace" onkeypress="controlarVirgulaAuto(event)" >
+            <button class="btn-gerar" title="btAleatorio"  data-i18n="btAleatorio" onclick="adicionarNumerosAleatorios()" ><span data-i18n="btn_addNum"></span></button>
+            <button type="button" onclick="document.getElementById('inputNumerosAleatorios').value = '';document.getElementById('inputNumerosAleatorios').focus();" class="btn-limpar-pesquisa" title="limpaCampoAleatorio" data-i18n="limpaCampoAleatorio" >❌</button>
+            <div class="dica-numeros" data-i18n="textNumAleatorio"></div>
+        </div>
+
+         <!-- A div abaixo, gera os numeros na sequencia -->
+        <div class="area-numeros" style="margin-right: 0.5%;">
+            <label class="label-numeros" data-i18n="numSequencia" ></label>
+            <input type="text" class="input-numeros" id="inputNumeros" maxlength="10" placeholder="sequenciPlace" data-i18n="sequenciPlace" oninput="limitarVirgula(this)">
+            <button class="btn-gerar" title="title_sequencia" data-i18n="title_sequencia" onclick="gerarNumeros()"><span data-i18n="btn_gerarSeq"></span></button>
+            <button type="button" onclick="document.getElementById('inputNumeros').value = '';document.getElementById('inputNumeros').focus();" class="btn-limpar-pesquisa" title="titleSequence" data-i18n="titleSequence" >❌</button>
+            <div class="dica-numeros" data-i18n="text_sequencial" title="text_sequencial"></div>
+        </div>
+
+        <!-- A div abaixo, configuracao de velocidade da barra do sorteio -->
+        <div class="area-numeros"  style="padding-bottom:0;"  >
+             <label class="label-numeros" data-i18n="configSort" ></label>
+            <div class="config-velocidade" style="margin-bottom: 3px;">
+                <span class="label-velocidade" data-i18n="sorteioConfig"></span>
+                <select class="select-velocidade" style="padding-right:15px" id="velocidadeSorteio">
+                    <option value="5000" selected data-i18n="velLento"></option>
+                    <option value="3000" data-i18n="velNormal"></option>
+                    <option value="1500" data-i18n="velRapido"></option>
+                    <option value="500" data-i18n="velInstant"></option>
+                </select>
+            </div>
+            
+            <!-- A div abaixo, configuracao de velocidade das piscadas dos nomes na tela -->
+            <div class="config-velocidade" style="margin-bottom: 3px;">
+                <span class="label-velocidade" data-i18n="piscadaConfig"></span>
+                <select class="select-velocidade" id="velocidadePiscada">
+                    <option value="1200" data-i18n="pisLento"></option>
+                    <option value="800" data-i18n="pisNormal"></option>
+                    <option value="400" data-i18n="pisRapido" ></option>
+                    <option value="200" selected data-i18n="pisMRapido" ></option>
+                    <option value="50" data-i18n="pisStrobo"></option>
+                </select>
+            </div>
+
+            <!-- Botao para entrar nas configuracoes de audio, modal escuro  -->
+            <button class="btn-gerar btn-mute" title="titleAudio" data-i18n="titleAudio" onclick="formularioAudio()"  ><span data-i18n="btnAudio"></span></button>
+        </div>
+
+        <!-- Div onde mostra a lista de participantes, no lado direito -->
+        <div class="area-input" style="float: right;">
+            <label class="label" id="tituloLista" data-i18n="listaParticipante"></label>
+            <div id="listaParticipantes">
+                <div id="butSearch">
+                <input type="text" class="input-novo cadastro" style="width: 40%;" id="inputPesquisa" maxlength="30" placeholder="placePesquisa" data-i18n="placePesquisa" oninput="pesquisarCadastrado(this.value)"> 
+                <button type="button" onclick="document.getElementById('inputPesquisa').value = ''; limparPesquisa()" class="btn-limpar-pesquisa" title="btnLimpaPesquisa" data-i18n="btnLimpaPesquisa">❌</button>
+                <button class="btn-importar-todos but btn-limpar-tudo"  id="btnImportarTodos" onclick="importarOuRetornar()" title="title_import" data-i18n="title_import">📥 IMP</button>
+                </div>
+                <div class="lista-cadastrados" id="listaEditavel"></div>
+                <div class="lista-cadastrados-espera" id="listaEspera"></div>
+                <button class="but-historico but-importar but-prim-imp" id="butEspera" style="margin-top:5px;display:none;" title="" onclick="mostraEspera()">🖐 <span data-i18n="btn_espera"></span> </button>
+                <button class="but-historico but-importar but-prim-imp" id="butVoltar" style="margin-top:5px;display:none;" title="" onclick="esconderEspera()"><span style="color:#ffaa00">↻ &nbsp</span><span data-i18n="btn_volta"></span></button>
+                <div class="contador" id="contador">0 nomes</div>
+            </div>
+        </div>
+
+        <!-- Div onde mostra a lista de cadastrados, no lado esquerdo -->
+        <div class="area-input" style="float: left;margin-right: 0.5%;" >
+            <label class="label" data-i18n="listaCadastrados"></label>
+            <!--<input type="text" class="input-novo cadastro" style="width: 53%;" id="inputNumero" maxlength="11" placeholder="cadNumCpf" data-i18n="cadNumCpf" >-->
+            <input type="text" class="input-novo cadastro" style="width: 40%;" id="inputNumero"  maxlength="11"  placeholder="cadNumCpf" data-i18n="cadNumCpf" > <input type="checkbox" id="checkNIF" class="checkbox" >&nbsp<span id="spanNIF" style="color:#ffffff;" title="Checkbox seleccionado, completa el NIF añadiendo la letra automaticamente." >NIF</span> 
+            <button type="button" onclick="document.getElementById('inputNumero').value = '';document.getElementById('inputNumero').focus();document.getElementById('inputNumero').classList.remove('cpf-ok');" class="btn-limpar-pesquisa" title="title_limpaCpf" data-i18n="title_limpaCpf" >❌</button>
+            <!-- Botao CAD para cadastrar numeros e CPF -->
+            <button class="but btn-limpar-numeros" id="cadastrarNumero"  onclick="
+                document.getElementById('inputNumero').classList.remove('cpf-ok');
+                if(document.getElementById('inputNumero').value === ''){ 
+                    if(idiomaAtual == 'pt'){
+                        travaInput(inputNumero, '⚠️ Digite um número ou CPF antes!');
+                        return;
+                    }else if(idiomaAtual == 'en'){
+                       travaInput(inputNumero, '⚠️ Enter a number or SSN first!');
+                        return; 
+                    }else{
+                        travaInput(inputNumero, '⚠️ Ingrese primero um número o NIF!');
+                        return;
+                    }
+                }; 
+                adicionarCadastrado();" 
+                title="title_cad" data-i18n="title_cad"
+                style="position: relative; padding-left: 20px;padding-right: 20px;"><span data-i18n="btnCad"></span>
+            </button>  
+            <div class="lista-cadastrados" id="listaCadastrados">
+                <input type="text" class="input-novo cadastro" id="inputCadastrado" maxlength="30" placeholder="placeCadNome" data-i18n="placeCadNome">
+            </div>
+            <div class="titulo credito" onclick="formularioCredito()"><img src='flags/logo_branco_colorido.jpg' alt='bandeira usa' width='20' height='15'>&nbsp<span class="nome-credito" data-i18n="creditoForm"></span></div>
+            <div class="contador" id="contarCadastrados">0 nomes</div> 
+        </div>
+
+        <!-- A div abaixo, mostra os botoes, fica no centro -->
+        <div class="botoes">   
+            <button class="but btn-sortear" id="btnSortear" onclick="abrirSorteio()">🎲 <span data-i18n="btn_sortear" ></span></button>
+            <button class="but-historico" onclick="verHistorico()" title="title_hist" data-i18n="title_hist">📜 HIST.</button>
+            <button class="but-historico" onclick="verHistoricoAtual()" title="title_histAtual" data-i18n="title_histAtual" >📜 <span data-i18n="btn_atual"></span></button>
+            <button class="but-historico" onclick="verHistoricoPermanente()" title="title_histPerm" data-i18n="title_histPerm">📜 PERM.</button>  
+            <button class="but btn-limpar" onclick="resetarSorteados()" title="title_reiniciar" data-i18n="title_reiniciar">🔄 <span data-i18n="btn_reiniciar"></span></button>
+            <button class="but btn-limpar-tudo" onclick="limparTudo()" title="title_limpar" data-i18n="title_limpar">🗑️ <span data-i18n="btn_limpar"></span></button>
+            <button class="but btn-exportar" onclick="reportar()" title="title_importar" data-i18n="title_importar">🔄 <span data-i18n="btn_importar"></span></button>
+            <button class="but btn-overlay" onclick="salvarImagem()" title="title_salvar" data-i18n="title_salvar">📸 <span data-i18n="btn_salvar"></span></button>
+            
+            <!-- a div que mostra os botoes presets abaixo dos outros botoes -->
+            <div class="presets" style="width:90%;">
+                <button id="btnPresetFamilia" class="botao-preset ativo" title="title_presets" data-i18n="title_presets">💾 <span class="but-pequeno">P 1</span></button>
+                <button id="btnPresetInfantil" class="botao-preset" title="title_presets" data-i18n="title_presets">💾  <span class="but-pequeno">P 2</span></button>
+                <button id="btnPresetMusica" class="botao-preset" title="title_presets" data-i18n="title_presets">💾  <span class="but-pequeno">P 3</span></button>
+                <button id="btnPresetGeral" class="botao-preset" title="title_presets" data-i18n="title_presets">💾  <span class="but-pequeno">P 4</span></button>
+                <button class="botao-pequeno" id="limpaTodosPresets" onclick="limparPresetAtual()" title="title_limpaPresets" data-i18n="title_limpaPresets">🗑️  <span class="but-pequeno">L P</span></button>
+            </div>
+	    <button class="but-historico but-importar but-prim-imp" title="title_salvaTudo" data-i18n="title_salvaTudo" onclick="exportarTudo()">💼 <span data-i18n="btn_salvaTudo"></span></button>
+            <button class="but-historico but-importar" title="title_backup" data-i18n="title_backup" onclick="importarTudo()">📥 Backup</button>   
+        </div>
+    </div>
+    <!-- MODAL OVERLAY DO SORTEIO -->
+    <div class="overlay-sorteio" id="overlaySorteio">
+        <!-- Div que mosrta o nome piscando e sendo sorteado -->
+        <div class="nome-sorteado-overlay" id="nomeSorteadoOverlay"></div>
+        <!-- Div onde mostra a barra de progresso dentro -->
+        <div class="barra-progresso-overlay" id="barraProgressoOverlay">
+            <!-- Div barra de progresso -->
+            <div class="barra-preenchimento-overlay" id="barraPreenchimentoOverlay"></div>
+        </div>
+        <!-- Divo do botao sortear no modal de sorteio -->
+        <div class="botoes-overlay">
+            <button class="btn-proximo" id="btnProximo" onclick="sortearProximo()">🎲 SORTEAR PRÓXIMO</button>
+        </div>
+        <!-- Div com os botoes abaixo do botao sortear proximo -->
+        <div class="botao-secundario">
+            <div class="btn-secundario historico-secundario" onclick="verHistoricoAtual()">HISTÓRICO📜</div> 
+            <div class="btn-secundario audio-secundario" onclick="formularioAudio()" >ÁUDIO &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp🔊</div>
+            <div class="btn-secundario voltar-secundario" onclick="fecharSorteio()">VOLTAR&nbsp&nbsp&nbsp&nbsp⬅️</div>
+        </div>
+        <!-- Div que mostra o status do sorteio no modal de sorteio -->
+        <div class="status-overlay" id="statusOverlay"></div>
+    </div>
+    <script src="script/script.js"></script>
+</body>
+</html>
